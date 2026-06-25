@@ -74,9 +74,14 @@ def handler(event: dict, context) -> dict:
             return _err(cors_headers, f'Ошибка получения токена: {e.read().decode()}')
 
         access_token = token_json.get('access_token', '')
+        if not access_token:
+            return _err(cors_headers, f'Discord не вернул токен: {json.dumps(token_json)}')
 
         user = _discord_get('https://discord.com/api/users/@me', access_token)
-        guilds = _discord_get('https://discord.com/api/users/@me/guilds', access_token)
+        if not user:
+            return _err(cors_headers, 'Не удалось получить данные пользователя от Discord')
+
+        guilds = _discord_get('https://discord.com/api/users/@me/guilds', access_token) or []
 
         is_owner = str(user.get('id')) == str(owner_id)
 
