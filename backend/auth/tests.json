@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "Получение ссылки для входа через Discord",
+      "method": "GET",
+      "path": "/?action=login&redirect_uri=https://example.poehali.dev",
+      "expectedStatus": 200,
+      "expectedBody": {"auth_url": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Callback без кода возвращает ошибку",
+      "method": "GET",
+      "path": "/?action=callback",
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
